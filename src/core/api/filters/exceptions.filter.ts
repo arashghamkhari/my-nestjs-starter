@@ -41,8 +41,10 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     /*
      Bad request exception
      */
-    if (e instanceof BadRequestException)
+    if (e instanceof BadRequestException) {
+      captureException(e);
       return res.setHeader('EXC', 'EXC_BAD_REQUEST').end();
+    }
 
     /*
      Unhandled errors
