@@ -14,9 +14,13 @@ Sentry.init({
   profilesSampleRate: 1.0,
   beforeSend: (event, hint) => {
     if (!sentryConfig.DSN) {
-      if (hint.syntheticException) console.error(hint.syntheticException);
       if (hint.originalException) console.error(hint.originalException);
-      return null; // this drops the event and nothing will be sent to sentry
+      else if (hint.syntheticException) console.error(hint.syntheticException);
+
+      if (hint.captureContext)
+        console.error(JSON.stringify(hint.captureContext, null, 2));
+
+      return null; // this drops the event and nothing will be send to sentry
     }
     return event;
   },

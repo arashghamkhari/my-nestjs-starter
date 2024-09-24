@@ -24,13 +24,16 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
       return res.setHeader('EXC', e.message).end();
 
     // validator errors
+    let unknownValidationErrorOccur = false;
     if (Array.isArray(e.response?.message) && e.response?.message.length > 0) {
       for (const msg of e.response.message) {
-        if (!msg.startsWith('EXC_'))
-          throw new Error(
-            'Validation error message not found or invalid. message: ' +
-              e.response.message.join(','),
-          );
+        if (!unknownValidationErrorOccur && !msg.startsWith('EXC_'))
+          unknownValidationErrorOccur = true;
+      }
+
+      if (unknownValidationErrorOccur) {
+        captureException(e);
+        return res.setHeader('EXC', 'EXC_BAD_REQUEST').end();
       }
 
       return res
