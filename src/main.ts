@@ -44,6 +44,11 @@ async function bootstrap() {
         )
         .build(),
     ),
+    {
+      swaggerOptions: {
+        persistAuthorization: true,
+      },
+    },
   );
 
   await app.listen(appConfig.port);
