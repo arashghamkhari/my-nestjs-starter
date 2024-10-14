@@ -10,6 +10,7 @@ import { AppConfig } from './configs/app.config';
 import fs from 'node:fs';
 import path from 'node:path';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +18,9 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
 
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
+
+  // apply cookie
+  app.use(cookieParser());
 
   // enable auto validation
   app.useGlobalPipes(
