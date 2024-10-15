@@ -1,4 +1,4 @@
-FROM node:18.20.4-alpine3.19 AS build
+FROM node:18.20.4 AS build
 
 ENV SENTRY_URL=''
 ENV SENTRY_AUTH_TOKEN=''
@@ -17,10 +17,11 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY package.json .
-COPY entrypoint.sh .
-COPY SWAGGER.md .
-COPY --from=build /app/dist ./dist
+COPY --from=build /app/dist .
+COPY --from=build /app/package.json .
+COPY --from=build /app/package-lock.json .
+COPY --from=build /app/entrypoint.sh .
+COPY --from=build /app/SWAGGER.md .
 
 RUN npm i --omit=dev && npm cache clean --force
 
