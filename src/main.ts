@@ -1,5 +1,5 @@
-import './core/environments.js';
 import './core/dotenv.js';
+import './core/environments.js';
 import './core/sentry/sentry.js';
 
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
