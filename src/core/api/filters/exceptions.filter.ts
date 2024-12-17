@@ -1,4 +1,9 @@
-import { ArgumentsHost, BadRequestException, Catch } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  BadRequestException,
+  Catch,
+  NotFoundException,
+} from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { captureException, captureMessage } from '@sentry/nestjs';
 
@@ -56,6 +61,12 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
       captureException(e);
       return res.setHeader('EXC', 'EXC_BAD_REQUEST').end();
     }
+
+    /*
+     Not found exception
+     */
+    if (e instanceof NotFoundException)
+      return res.setHeader('EXC', 'EXC_API_NOT_FOUND').end();
 
     /*
      Unhandled errors
